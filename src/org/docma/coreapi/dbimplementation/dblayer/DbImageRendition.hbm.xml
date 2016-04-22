@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.docma.coreapi.dbimplementation.dblayer">
+
+  <class name="DbImageRendition" >
+
+    <id name="renditionDbId">
+        <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+            <param name="sequence_name">seq_image_rendition</param>
+        </generator>
+    </id>
+
+    <many-to-one name="owner"
+                 column="nodeDbId"
+                 not-null="true"
+                 unique-key="UNIQUE_NODE_IMGREND"
+                 foreign-key="FK_IMGREND_NODE" />
+
+    <property name="langCode" type="string" length="16" not-null="true" unique-key="UNIQUE_NODE_IMGREND" />
+
+    <property name="renditionName" type="string" length="200" not-null="true" unique-key="UNIQUE_NODE_IMGREND" />
+
+    <property name="content" type="materialized_blob" />
+
+    <property name="contentLength" />
+
+    <property name="contentType" type="string" length="80" />
+
+    <property name="maxWidth" />
+
+    <property name="maxHeight" />
+
+  </class>
+
+</hibernate-mapping>

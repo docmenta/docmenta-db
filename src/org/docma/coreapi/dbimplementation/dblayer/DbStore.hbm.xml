@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.docma.coreapi.dbimplementation.dblayer">
+
+  <class name="DbStore">
+
+    <id name="storeDbId">
+        <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+            <param name="sequence_name">seq_store</param>
+        </generator>
+    </id>
+
+    <property name="storeDisplayId" type="string" length="80" not-null="true" unique="true" />
+
+    <set name="versions"
+         inverse="true"
+         cascade="all,delete-orphan"
+         order-by="versionName">
+      <key column="storeDbId"/>
+      <one-to-many class="DbVersion"/>
+    </set>
+
+    <map name="properties" table="DbStoreProperty">
+        <key column="storeDbId" foreign-key="FK_PROP_STORE" />
+        <map-key column="propName" type="string" length="200" />
+        <element column="propValue" type="materialized_clob" length="268435456" />
+    </map>
+
+  </class>
+
+</hibernate-mapping>

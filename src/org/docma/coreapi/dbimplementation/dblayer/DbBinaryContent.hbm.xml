@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.docma.coreapi.dbimplementation.dblayer">
+
+  <class name="DbBinaryContent" >
+
+    <id name="binaryDbId">
+        <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+            <param name="sequence_name">seq_content</param>
+        </generator>
+    </id>
+
+    <many-to-one name="owner"
+                 column="nodeDbId"
+                 not-null="true"
+                 unique-key="UNIQUE_NODE_BINARY"
+                 foreign-key="FK_BINARY_NODE" />
+
+    <property name="langCode" type="string" length="16" not-null="true" unique-key="UNIQUE_NODE_BINARY" />
+
+    <property name="contentLength" />
+
+    <property name="contentType" type="string" length="80" />
+
+    <bag name="lobWrapper"
+         inverse="true"
+         cascade="all,delete-orphan" 
+         order-by="lobDbId desc" >
+        <key column="binaryDbId" />
+        <one-to-many class="DbBinaryLob" /> 
+                <!-- name="lobWrapper" cascade="all" property-ref="owner" 
+                lazy="proxy" constrained="true" foreign-key="FK_BINARY_CONTENT" -->
+    </bag>
+    
+  </class>
+
+</hibernate-mapping>

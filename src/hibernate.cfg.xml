@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+    <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+    <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/docmentadb</property>
+    <property name="hibernate.connection.username">docma_usr</property>
+    <property name="hibernate.connection.password">docma_pw</property>
+    <mapping resource="org/docma/coreapi/dbimplementation/dblayer/DbApplicationProperty.hbm.xml"/>
+    <mapping resource="org/docma/coreapi/dbimplementation/dblayer/DbPubExportAttribute.hbm.xml"/>
+    <mapping resource="org/docma/coreapi/dbimplementation/dblayer/DbPublicationExport.hbm.xml"/>
+    <mapping resource="org/docma/coreapi/dbimplementation/dblayer/DbStore.hbm.xml"/>
+    <mapping resource="org/docma/coreapi/dbimplementation/dblayer/DbVersion.hbm.xml"/>
+    <mapping resource="org/docma/coreapi/dbimplementation/dblayer/DbNode.hbm.xml"/>
+    <mapping resource="org/docma/coreapi/dbimplementation/dblayer/DbNodeLock.hbm.xml"/>
+    <mapping resource="org/docma/coreapi/dbimplementation/dblayer/DbReference.hbm.xml"/>
+    <mapping resource="org/docma/coreapi/dbimplementation/dblayer/DbBinaryContent.hbm.xml"/>
+    <mapping resource="org/docma/coreapi/dbimplementation/dblayer/DbTextContent.hbm.xml"/>
+    <mapping resource="org/docma/coreapi/dbimplementation/dblayer/DbImageRendition.hbm.xml"/>
+    <mapping resource="org/docma/userapi/dbimplementation/dblayer/DbUser.hbm.xml"/>
+    <mapping resource="org/docma/userapi/dbimplementation/dblayer/DbUserGroup.hbm.xml"/>
+  </session-factory>
+</hibernate-configuration>

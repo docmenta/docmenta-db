@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.docma.coreapi.dbimplementation.dblayer">
+  <class name="DbVersion">
+
+    <id name="versionDbId">
+        <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+            <param name="sequence_name">seq_version</param>
+        </generator>
+    </id>
+
+    <many-to-one name="store" 
+                 column="storeDbId"
+                 not-null="true"
+                 unique-key="UNIQUE_STORE_VERSION"
+                 foreign-key="FK_STORE" />
+
+    <many-to-one name="baseVersion"
+                 column="baseVersionDbId"
+                 not-null="false"
+                 foreign-key="FK_BASEVERSION" />
+
+    <property name="versionName" type="string" length="80" not-null="true" unique-key="UNIQUE_STORE_VERSION" />
+
+    <property name="nextNodeNumber" type="long" />
+
+    <set name="publicationExports"
+         inverse="true"
+         cascade="all,delete-orphan" >
+        <key column="versionDbId" />
+        <one-to-many class="DbPublicationExport"/>
+    </set>
+
+    <map name="properties" table="DbVersionProperty">
+        <key column="versionDbId" foreign-key="FK_PROP_VERSION" />
+        <map-key column="propName" type="string" length="200" />
+        <element column="propValue" type="materialized_clob" length="268435456" />
+    </map>
+
+    <bag name="rootNodes"
+          inverse="true"
+          where="parent_node_id is null"
+          cascade="all" 
+          order-by="childPos">
+        <key column="versionDbId" />
+        <!-- <list-index column="childPos" /> -->
+        <one-to-many class="DbNode" />
+    </bag>
+
+    <bag name="aliases"
+          inverse="true"
+          cascade="delete" 
+          order-by="alias" 
+          lazy="true" >
+        <key column="versionDbId" />
+        <one-to-many class="DbAlias" />
+    </bag>
+
+  </class>
+</hibernate-mapping>

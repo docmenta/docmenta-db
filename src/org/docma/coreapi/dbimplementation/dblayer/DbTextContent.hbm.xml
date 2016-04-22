@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.docma.coreapi.dbimplementation.dblayer">
+
+  <class name="DbTextContent" >
+
+    <id name="textDbId">
+        <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+            <param name="sequence_name">seq_content</param>
+        </generator>
+    </id>
+
+    <many-to-one name="owner"
+                 column="nodeDbId"
+                 not-null="true"
+                 unique-key="UNIQUE_NODE_TEXT"
+                 foreign-key="FK_TEXT_NODE" />
+
+    <property name="langCode" type="string" length="16" not-null="true" unique-key="UNIQUE_NODE_TEXT" />
+
+    <property name="content" type="materialized_clob" length="268435456" />
+
+    <property name="contentLength" />
+
+    <property name="contentType" type="string" length="80" />
+
+  </class>
+
+</hibernate-mapping>

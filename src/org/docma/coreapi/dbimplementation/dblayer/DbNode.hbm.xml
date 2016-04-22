@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.docma.coreapi.dbimplementation.dblayer">
+
+  <class name="DbNode" >    <!-- discriminator-value="node" -->
+
+    <id name="nodeDbId">
+        <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+            <param name="sequence_name">seq_node</param>
+        </generator>
+    </id>
+
+    <!-- <discriminator column="nodeClass" type="string" length="20" /> -->
+
+    <many-to-one name="version"
+                 column="versionDbId"
+                 not-null="true" 
+                 foreign-key="FK_NODE_VERSION"
+                 unique-key="UNIQUE_VERSION_NODE" />
+
+    <many-to-one name="parentNode"
+                 column="parent_node_id"
+                 class="DbNode"
+                 foreign-key="FK_PARENT_NODE"
+                  /> <!-- unique-key="UNIQUE_CHILD_POS" -->
+
+    <bag name="childNodes"
+          inverse="true"
+          cascade="all" 
+          order-by="childPos" >
+        <key column="parent_node_id" />
+        <!-- <list-index column="childPos" /> -->
+        <one-to-many class="DbNode" />
+    </bag>
+
+    <map name="attributes" table="DbNodeAttribute" >
+        <key column="nodeDbId" foreign-key="FK_ATT_NODE" />
+        <composite-map-key class="NodeAttributeKey" >
+            <key-property name="langCode" type="string" length="16" />
+            <key-property name="attName" type="string" length="200" />
+        </composite-map-key>
+        <element column="attValue" type="text" />
+    </map>
+
+    <list name="aliasList" table="DbNodeAlias" cascade="all" >
+        <key column="nodeDbId" /> <!-- not-null="true" foreign-key="FK_ALIAS_NODE"  -->
+        <list-index column="pos" />
+        <one-to-many class="DbAlias" />
+        <!-- <element column="aliasName" type="string" length="80" not-null="true" /> -->
+    </list>
+
+    <set name="locks" inverse="true" cascade="all,delete-orphan" >
+        <key column="nodeDbId" />
+        <one-to-many class="DbNodeLock" />
+    </set>
+
+    <map name="binaryContent" inverse="true" cascade="all,delete-orphan" lazy="extra" >
+        <key column="nodeDbId" />
+        <map-key column="langCode" type="string" length="16" />
+        <one-to-many class="DbBinaryContent" />
+    </map>
+
+    <map name="textContent" inverse="true" cascade="all,delete-orphan" lazy="extra" >
+        <key column="nodeDbId" />
+        <map-key column="langCode" type="string" length="16" />
+        <one-to-many class="DbTextContent" />
+    </map>
+
+    <map name="imageRenditions" inverse="true" cascade="all,delete-orphan" lazy="extra" >
+        <key column="nodeDbId" />
+        <composite-map-key class="ImageRenditionKey" >
+            <key-property name="langCode" type="string" length="16" />
+            <key-property name="renditionName" type="string" length="200" />
+        </composite-map-key>
+        <one-to-many class="DbImageRendition" />
+    </map>
+
+    <many-to-one name="lastModifiedNode"
+                 column="lastModNodeDbId"
+                 class="DbNode"
+                 access="field" insert="false" update="false" 
+                 foreign-key="FK_LASTMODIFIED_NODE"
+                  /> <!-- formula="select nd from DbNode nd where nd.nodeDbId = lastModNodeDbId" -->
+    
+    <property name="nodeType" type="string" length="30" />
+    <property name="versionDbId" not-null="true" insert="false" update="false" /> <!-- access="field" -->
+    <property name="nodeNumber" not-null="true" unique-key="UNIQUE_VERSION_NODE" />
+    <property name="childPos" not-null="true" /> <!-- unique-key="UNIQUE_CHILD_POS" -->
+    <!--  <column name="childPos" check="childPos >= 0" /> -->
+    <property name="lastModNodeDbId" access="field" /> <!-- not-null="true" -->
+
+  </class>
+</hibernate-mapping>

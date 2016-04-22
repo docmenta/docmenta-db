@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.docma.coreapi.dbimplementation.dblayer" >
+  <class name="DbPublicationExport" >
+
+      <id name="pubExportDbId">
+          <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator" >
+              <param name="sequence_name">seq_publication_export</param>
+          </generator>
+      </id>
+
+      <many-to-one name="version"
+                   column="versionDbId"
+                   not-null="true"
+                   unique-key="UNIQUE_PUBEXPORT"
+                   foreign-key="FK_VERSION" />
+
+      <property name="exportName" type="string" length="80" not-null="true" unique-key="UNIQUE_PUBEXPORT" />
+
+      <bag name="lobWrapper"
+           inverse="true"
+           cascade="all,delete-orphan" 
+           order-by="lobDbId desc" >
+          <key column="pubExportDbId" />
+          <one-to-many class="DbPubExportLob" /> 
+                <!-- name="lobWrapper" cascade="all" property-ref="owner" 
+                lazy="proxy" constrained="true" foreign-key="FK_PUBEXPORT_LOB" -->
+      </bag>
+
+      <property name="exportSize" />
+
+      <property name="exportLog"
+                type="blob" />
+<!--
+      <set name="attributes" inverse="true" >
+          <key column="pubExportDbId" />
+          <one-to-many class="DbPubExportAttribute" />
+      </set>
+-->
+
+    <map name="attributes" table="DbPubExportAttribute">
+        <key column="pubExportDbId" foreign-key="FK_ATT_PUBEXPORT" />
+        <map-key column="attName" type="string" length="200" />
+        <element column="attValue" type="text" />
+    </map>
+
+  </class>
+</hibernate-mapping>

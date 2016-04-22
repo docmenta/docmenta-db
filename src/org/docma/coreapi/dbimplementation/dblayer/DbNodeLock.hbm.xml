@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.docma.coreapi.dbimplementation.dblayer" >
+  <class name="DbNodeLock" >
+
+    <id name="lockDbId">
+        <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+            <param name="sequence_name">seq_node_lock</param>
+        </generator>
+    </id>
+
+<!--
+    <composite-id name="id" class="DbNodeLockPk" >
+        <key-many-to-one name="lockedNode" foreign-key="FK_LOCK_NODE" >
+            <column name="nodeDbId" />
+        </key-many-to-one>
+        <key-property name="lockName" type="string" length="240" />
+    </composite-id>
+-->
+
+    <many-to-one name="lockedNode"
+                 column="nodeDbId"
+                 foreign-key="FK_LOCK_NODE" 
+                 unique-key="UNIQUE_NODE_LOCK" /> 
+
+    <property name="lockName" type="string" length="240" not-null="true" unique-key="UNIQUE_NODE_LOCK" />
+    <property name="userId" type="string" length="80" />
+    <property name="timeout" />
+    <property name="creationTime" />
+
+  </class>
+</hibernate-mapping>

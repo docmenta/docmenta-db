@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.docma.coreapi.dbimplementation.dblayer" >
+  <class name="DbAlias" >
+<!--
+    <id name="aliasDbId">
+        <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+            <param name="sequence_name">seq_alias</param>
+        </generator>
+    </id>
+-->
+    <composite-id>
+        <key-many-to-one name="version" foreign-key="FK_ALIAS_VERSION" >
+            <column name="versionDbId" not-null="true" />
+        </key-many-to-one>
+        <key-property name="alias" type="string" length="80" />
+    </composite-id>
+
+    <many-to-one name="node"
+                 column="nodeDbId"
+                 insert="false" 
+                 update="false"
+                 foreign-key="FK_ALIAS_NODE" /> 
+                 <!-- not-null="true" -->
+                 <!-- class="DbNode" -->
+<!--
+    <many-to-one name="version" 
+                 column="versionDbId" 
+                 not-null="true"
+                 foreign-key="FK_ALIAS_VERSION" 
+                 unique-key="UNIQUE_ALIAS" /> 
+
+    <property name="alias" type="string" length="80" not-null="true" unique-key="UNIQUE_ALIAS" /> 
+-->
+    <!-- <property name="pos" not-null="true" /> --> <!-- insert="false" update="false"  -->
+  </class>
+</hibernate-mapping>

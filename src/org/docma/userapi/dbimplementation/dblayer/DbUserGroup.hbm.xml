@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.docma.userapi.dbimplementation.dblayer">
+
+  <class name="DbUserGroup">
+
+    <id name="groupDbId">
+      <generator class="native"/>
+    </id>
+
+    <property name="groupName" type="string" length="80" not-null="true" unique="true" />
+
+    <map name="properties" table="DbUserGroupProperty">
+        <key column="groupDbId" foreign-key="FK_PROP_USRGROUP" />
+        <map-key column="propName" type="string" length="200" />
+        <element column="propValue" type="text" />
+    </map>
+
+    <set name="users"
+         table="DbUserGroupRelation"
+         inverse="true" >
+      <key column="groupDbId" />
+      <many-to-many column="userDbId" class="DbUserGroup"/>
+    </set>
+
+  </class>
+
+</hibernate-mapping>

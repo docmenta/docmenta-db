@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.docma.coreapi.dbimplementation.dblayer">
+
+  <class name="DbBinaryLob" >
+
+    <id name="lobDbId">
+        <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+            <param name="sequence_name">seq_binary_lob</param>
+        </generator>
+    </id>
+
+    <many-to-one name="owner"
+                 column="binaryDbId" 
+                 not-null="true"
+                 foreign-key="FK_BINARY_CONTENT" />
+
+    <property name="content" type="blob" />
+
+  </class>
+
+</hibernate-mapping>

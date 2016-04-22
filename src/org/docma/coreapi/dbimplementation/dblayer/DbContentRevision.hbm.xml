@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.docma.coreapi.dbimplementation.dblayer">
+
+  <class name="DbContentRevision" >
+
+    <id name="revisionDbId">
+        <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+            <param name="sequence_name">seq_content_revision</param>
+        </generator>
+    </id>
+    
+    <property name="versionDbId" not-null="true" unique-key="UNIQUE_REVISION" index="INDEX_NODE_REVISIONS" />
+    <property name="nodeNumber"  not-null="true" unique-key="UNIQUE_REVISION" index="INDEX_NODE_REVISIONS" />
+    <property name="langCode"    not-null="true" unique-key="UNIQUE_REVISION" type="string" length="16"  />
+    <property name="timestamp"   not-null="true" unique-key="UNIQUE_REVISION" />
+    <property name="userId"      not-null="true" type="string" length="1024" />
+
+    <bag name="lobWrapper"
+         inverse="true"
+         cascade="all,delete-orphan" 
+         order-by="lobDbId desc" >
+        <key column="revisionDbId" />
+        <one-to-many class="DbRevisionLob" /> 
+    </bag>
+
+  </class>
+
+</hibernate-mapping>
