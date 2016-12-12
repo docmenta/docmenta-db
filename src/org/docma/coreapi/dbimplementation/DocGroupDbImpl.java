@@ -205,6 +205,9 @@ public class DocGroupDbImpl extends DocNodeDbImpl implements DocGroup
                 rollbackLocalTransactionRuntime(started, ex);  // throws runtime exception
             }
         }
+        if (! removed) {
+            throw new DocRuntimeException("Removing child failed: node not in child list.");
+        }
         fireChildRemovedEvent(child);
         return child;
     }
